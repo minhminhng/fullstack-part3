@@ -51,10 +51,37 @@ app.get('/api/persons/:id', (request, response) => {
   }  
 })
 
+// Generate unique id from random number
+const generateId = () => {
+  const id = Math.floor(Math.random() * 1000)
+  return id
+}
+
+// Add a person
+app.post('/api/persons/', (request, response, next) => {
+  const body = request.body
+
+  if (!body.name) {
+    return response.status(400).json({ error: 'missing name' })
+  }
+
+  if (!body.number) {
+    return response.status(400).json({ error: 'missing number' })
+  }
+
+  const person = {
+    name: body.name,
+    number: body.number,
+    id: generateId()
+  }
+
+  persons = persons.concat(person)
+  response.json(person)
+})
+
 // Delete a person with id
 app.delete('/api/persons/:id', (request, response, next) => {
   const id = Number(request.params.id)
-  console.log(id)
   persons = persons.filter(person => person.id !== id)
 
   response.status(204).end()
