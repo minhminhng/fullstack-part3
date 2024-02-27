@@ -75,6 +75,12 @@ app.post('/api/persons/', (request, response, next) => {
     id: generateId()
   }
 
+  const exist = persons.findIndex(p => p.name.toLocaleLowerCase() === body.name.toLocaleLowerCase())
+
+  if (exist > -1) {
+    return response.status(400).json({ error: 'name must be unique' })
+  }
+
   persons = persons.concat(person)
   response.json(person)
 })
