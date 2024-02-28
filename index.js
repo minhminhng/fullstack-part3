@@ -1,8 +1,7 @@
 const express = require('express')
+const morgan = require('morgan')
 
 const app = express()
-
-app.use(express.json())
 
 let persons = [
   { 
@@ -26,7 +25,21 @@ let persons = [
     "number": "39-23-6423122"
   }
 ]
+app.use(express.json())
 
+//---------- Request logger -------
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+// app.use(requestLogger)
+
+//---------- Morgan --------
+
+app.use(morgan('tiny'))
 //----------- Routes --------
 // Get all people
 app.get('/api/persons', (request, response) => {
@@ -92,6 +105,14 @@ app.delete('/api/persons/:id', (request, response, next) => {
 
   response.status(204).end()
 })
+
+//------- Unknown endpoint --------
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
+
 
 const PORT = 3001
 app.listen(PORT, () => {
