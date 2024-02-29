@@ -33,9 +33,9 @@ else {
   const person = new Person({
     name: process.argv[3],
     number: process.argv[4],
-})
+  })
 
-person.save().then(addedPerson => {
+  person.save().then(addedPerson => {
     console.log(`added ${addedPerson.name} number ${addedPerson.number} to phonebook`)
     mongoose.connection.close()
   })
