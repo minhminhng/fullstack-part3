@@ -6,34 +6,35 @@ const Person = require('./models/person')
 
 const app = express()
 
-let persons = [
-  { 
-    "id": 1,
-    "name": "Arto Hellas", 
-    "number": "040-123456"
-  },
-  { 
-    "id": 2,
-    "name": "Ada Lovelace", 
-    "number": "39-44-5323523"
-  },
-  { 
-    "id": 3,
-    "name": "Dan Abramov", 
-    "number": "12-43-234345"
-  },
-  { 
-    "id": 4,
-    "name": "Mary Poppendieck", 
-    "number": "39-23-6423122"
-  }
-]
+// let persons = [
+//   { 
+//     'id': 1,
+//     'name': 'Arto Hellas', 
+//     'number': '040-123456'
+//   },
+//   { 
+//     'id': 2,
+//     'name': 'Ada Lovelace', 
+//     'number': '39-44-5323523'
+//   },
+//   { 
+//     'id': 3,
+//     'name': 'Dan Abramov', 
+//     'number': '12-43-234345'
+//   },
+//   { 
+//     'id': 4,
+//     'name': 'Mary Poppendieck', 
+//     'number': '39-23-6423122'
+//   }
+// ]
 
 app.use(express.static('build'))
 app.use(cors())
 app.use(express.json())
 
 //---------- Request logger -------
+// eslint-disable-next-line no-unused-vars
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
   console.log('Path:  ', request.path)
@@ -80,6 +81,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 })
 
 // Generate unique id from random number
+// eslint-disable-next-line no-unused-vars
 const generateId = () => {
   const id = Math.floor(Math.random() * 1000)
   return id
@@ -116,9 +118,7 @@ app.post('/api/persons/', async (request, response, next) => {
 // Delete a person with id
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then(result => {
-      response.status(204).end()
-    })
+    .then(response.status(204).end())
     .catch(error => 
       next(error)
     )  
@@ -137,7 +137,7 @@ app.put('/api/persons/:id', (request, response, next) => {
     request.params.id, 
     person, 
     { new: true, runValidators: true, context: 'query' }
-    )
+  )
     .then(updatedPerson => {
       response.json(updatedPerson)
     })
