@@ -102,12 +102,6 @@ app.post('/api/persons/', async (request, response, next) => {
     number: body.number,
   })
 
-  const exist = await Person.findOne({ name: new RegExp(body.name, 'i') })
-
-  if (exist) {
-    return response.status(400).json({ error: 'name must be unique' })
-  }
-
   try {
     const savedPerson = await Person.create(person)
     if (savedPerson) {
@@ -139,7 +133,11 @@ app.put('/api/persons/:id', (request, response, next) => {
     number: body.number
   }
 
-  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+  Person.findByIdAndUpdate(
+    request.params.id, 
+    person, 
+    { new: true, runValidators: true, context: 'query' }
+    )
     .then(updatedPerson => {
       response.json(updatedPerson)
     })
