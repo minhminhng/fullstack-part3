@@ -60,8 +60,10 @@ app.get('/api/persons', (request, response) => {
 
 // Get people information
 app.get('/info', (request, response) => {
-  response.send(`<p>Phonebook has info for ${persons.length} people</p>
+  Person.countDocuments().then(result => {
+    response.send(`<p>Phonebook has info for ${result} people</p>
       <p>${Date()}</p>`)
+  })
 })
 
 // Get a person with id
@@ -83,7 +85,7 @@ const generateId = () => {
 }
 
 // Add a person
-app.post('/api/persons/', (request, response, next) => {
+app.post('/api/persons/', async (request, response, next) => {
   const body = request.body
 
   if (!body.name) {
@@ -94,20 +96,23 @@ app.post('/api/persons/', (request, response, next) => {
     return response.status(400).json({ error: 'missing number' })
   }
 
-  const person = {
+  const person = new Person({
     name: body.name,
     number: body.number,
-    id: generateId()
-  }
+  })
 
-  const exist = persons.findIndex(p => p.name.toLocaleLowerCase() === body.name.toLocaleLowerCase())
+  const exist = await Person.findOne({ name: new RegExp(body.name, 'i') })
 
-  if (exist > -1) {
+  if (exist) {
     return response.status(400).json({ error: 'name must be unique' })
   }
 
-  persons = persons.concat(person)
-  response.json(person)
+  person.save().then(savedPerson => {
+    response.json(savedPerson)
+  })
+  .catch(error => 
+    console.log(error)
+  )
 })
 
 // Delete a person with id

@@ -1,0 +1,49 @@
+GET http://localhost:3001/api/persons 
+
+###
+GET http://localhost:3001/info
+
+###
+GET http://localhost:3001/api/persons/2
+
+###
+GET http://localhost:3001/api/persons/651c0eedc4ca8e03b0eb4410
+
+###
+DELETE http://localhost:3001/api/persons/604a00abb561a60d44c20d6c
+
+###
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+  "name": "Anna",
+  "number": "01-241-3512"
+}
+
+###
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+  "name": "Arto Hellas",
+  "number": "059-13-6431"
+}
+
+###
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+  "name": "Mi",
+  "number": "059-13-6431"
+}
+
+###
+POST https://desolate-wave-51425.herokuapp.com/api/persons/
+Content-Type: application/json
+
+{
+  "name": "Minh",
+  # "number": "059-13-6431"
+}
