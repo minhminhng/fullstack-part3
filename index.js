@@ -1,6 +1,8 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+const Person = require('./models/person')
 
 const app = express()
 
@@ -51,7 +53,9 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :b
 //----------- Routes --------
 // Get all people
 app.get('/api/persons', (request, response) => {
-  response.json(persons)
+  Person.find({}).then(persons =>
+    response.json(persons)
+  )
 })
 
 // Get people information
